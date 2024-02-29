@@ -1,12 +1,20 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash
 
+'''from django import forms'''
+from .forms import MyForm
+
+from app import mail
+from flask_mail import Message
+
+from flask import request
+
 
 ###
 # Routing for your application.
 ###
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
     """Render website's home page."""
     return render_template('home.html')
@@ -17,6 +25,27 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
+@app.route('/contact', methods=('GET', 'POST'))
+def contact():
+    """Render the website's contact page."""
+
+    form = MyForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+                msg_subject = form.subject.data
+                msg_name = form.name.data
+                msg_email = form.email.data
+                msg_body1 = form.message.data
+
+                msg = Message(msg_subject,
+                    sender=(msg_name, msg_email),
+                    recipients=["to@example.com"])
+                msg.body = msg_body1
+                mail.send(msg)
+
+                flash('Your message was successfully sent.', 'success')
+                return redirect(url_for('home'))
+    return render_template('contact.html', form=form)
 
 ###
 # The functions below should be applicable to all Flask apps.

@@ -1,3 +1,19 @@
 body {
     padding-top: 5rem;
 }
+
+.warning{
+    color: red;
+}
+
+.sbutton{
+    background-color: rgb(58, 58, 255);
+    color: white;
+    width: 100px;
+    height: 40px;
+}
+
+.submitmsg{
+    color: green;
+    font-size: 23px;;
+}
